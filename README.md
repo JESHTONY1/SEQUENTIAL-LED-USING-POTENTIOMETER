@@ -1,33 +1,18 @@
-#define trigPin 9
-#define echoPin 10
-#define buzzerPin 13
+const int potPin = A0;
+const int ledPins[] = {2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13};
+const int numLeds = sizeof(ledPins) / sizeof(ledPins[0]);
 void setup() {
-pinMode(trigPin, OUTPUT);
-pinMode(echoPin, INPUT);
-pinMode(buzzerPin, OUTPUT);
-Serial.begin(9600);
+for (int i = 0; i < numLeds; i++) {
+pinMode(ledPins[i], OUTPUT);
+}
+pinMode(potPin, INPUT);
 }
 void loop() {
-long duration, distance;
-digitalWrite(trigPin, LOW);
-delayMicroseconds(2);
-digitalWrite(trigPin, HIGH);
-delayMicroseconds(10);
-digitalWrite(trigPin, LOW);
-duration = pulseIn(echoPin, HIGH);
-distance = (duration * 0.034) / 2;
-if (distance <= 59)
-{
-digitalWrite(buzzerPin, HIGH);
-delay(5000);
-digitalWrite(buzzerPin, LOW);
-}
-else {
-digitalWrite(buzzerPin, LOW);
-}
-{
-Serial.print(distance);
-Serial.println(" cm");
-delay(500);
+int potValue = analogRead(potPin);
+int ledDelay = map(potValue, 0, 1023, 50, 500);
+for (int i = 0; i < numLeds; i++) {
+digitalWrite(ledPins[i], HIGH);
+delay(ledDelay);
+digitalWrite(ledPins[i], LOW);
 }
 }
